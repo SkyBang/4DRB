@@ -276,7 +276,8 @@ public class Autonom_BasicFunctions extends LinearOpMode {
 
     }
     public void Forward(int target,double pwr) {
-
+//nooo u can't just power the motors and expect them to run in a straight line
+//haha robot go brrrrrrrrrrr
 
         TLM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         BLM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
