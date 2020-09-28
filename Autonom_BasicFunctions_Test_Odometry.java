@@ -54,9 +54,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
+@Autonomous(name="Autonom_BasicFunctions_Test_Odometry")
 
-
-public class Autonom_BasicFunctions extends LinearOpMode {
+public class Autonom_BasicFunctions_Test_Odometry extends LinearOpMode {
 
     // Declare OpMode members.
     DcMotor TLM = null;
@@ -64,7 +64,7 @@ public class Autonom_BasicFunctions extends LinearOpMode {
     DcMotor BLM = null;
     DcMotor BRM = null;
 
-    float target=0;
+
 
 
 
@@ -74,43 +74,42 @@ public class Autonom_BasicFunctions extends LinearOpMode {
 
 
     @Override
-    public void runOpMode()  {
+    public void runOpMode() {
 
 
-            TRM = hardwareMap.dcMotor.get("Tright_drive");
-            BRM = hardwareMap.dcMotor.get("Bright_drive");
-            TLM = hardwareMap.dcMotor.get("Tleft_drive");
-            BLM = hardwareMap.dcMotor.get("Bleft_drive");
+         TRM = hardwareMap.dcMotor.get("Tright_drive");
+         BRM = hardwareMap.dcMotor.get("Bright_drive");
+        TLM = hardwareMap.dcMotor.get("Tleft_drive");
+        BLM = hardwareMap.dcMotor.get("Bleft_drive");
 
-            BLM.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            TLM.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            BRM.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            TRM.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            //am regasit printe elementele robotului conectate le hub cele 4 motoare
-
-
-            BLM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            TLM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            BRM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            TRM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            //servomotorul
-            TRM.setDirection(DcMotorSimple.Direction.REVERSE);
-            BRM.setDirection(DcMotorSimple.Direction.REVERSE);
-
-            BLM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            TLM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            BRM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            TRM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BLM.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        TLM.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        BRM.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        TRM.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //am regasit printe elementele robotului conectate le hub cele 4 motoare
 
 
+        BLM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        TLM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        BRM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        TRM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //servomotorul
+        TRM.setDirection(DcMotorSimple.Direction.REVERSE);
+        BRM.setDirection(DcMotorSimple.Direction.REVERSE);
 
-            BNO055IMU.Parameters parameters=new BNO055IMU.Parameters();
-            parameters.angleUnit= BNO055IMU.AngleUnit.DEGREES;
-            parameters.calibrationDataFile="BNO055IMUCalibration.json";
-            imu = hardwareMap.get(BNO055IMU.class, "imu");
-            imu.initialize(parameters);
-            angles=imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-         // setup
+        BLM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        TLM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BRM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        TRM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json";
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        // setup
         waitForStart();
 
            /*Forward(450,0.3);
@@ -122,10 +121,10 @@ public class Autonom_BasicFunctions extends LinearOpMode {
             BLM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             TLM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             BRM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            TRM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);*/
+            TRM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             telemetry.addData("reached turnAbsolute",".");
             telemetry.update();
-
+            turnAbsolute(90,0.15);
             TLM.setPower(0);
             BLM.setPower(0);
             TRM.setPower(0);
@@ -160,7 +159,7 @@ public class Autonom_BasicFunctions extends LinearOpMode {
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
         angles=imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-
+            turnAbsolute(-90,0.15);
             TLM.setPower(0);
             BLM.setPower(0);
             TRM.setPower(0);
@@ -184,139 +183,42 @@ public class Autonom_BasicFunctions extends LinearOpMode {
 
             //telemetrie
 
-
-    }
-    public void turnAbsolute(float target,double pwr)
-
-    {
-        BLM.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        TLM.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        BRM.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        TRM.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        //am regasit printe elementele robotului conectate le hub cele 4 motoare
-
+            */
 
         BLM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        TLM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        TLM.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         BRM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         TRM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //servomotorul
-        TRM.setDirection(DcMotorSimple.Direction.REVERSE);
-        BRM.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        BLM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        TLM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        BRM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        TRM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);BNO055IMU.Parameters parameters=new BNO055IMU.Parameters();
-        parameters.angleUnit= BNO055IMU.AngleUnit.DEGREES;
-        parameters.calibrationDataFile="BNO055IMUCalibration.json";
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        imu.initialize(parameters);
-        angles=imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-
-         float zAccumulated= angles.firstAngle;
-         telemetry.addData("mmc 5 plzzz",Math.abs(zAccumulated-target));
-         telemetry.update();
-
-        while (Math.abs(zAccumulated - target) >= 5) {
-
-            angles=imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-            zAccumulated=  angles.firstAngle;
-
-
-            if (zAccumulated >= target) {
-                TLM.setPower(-pwr);
-                BLM.setPower(-pwr);
-                TRM.setPower(pwr);
-                BRM.setPower(pwr);
-                telemetry.addData("status:","rotating");
-
-                    angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-                    telemetry.addData("Heading: ", angles.firstAngle);
-                    telemetry.addData("Roll: ", angles.secondAngle);
-                    telemetry.addData("Pitch", angles.thirdAngle);
-                    telemetry.update();
-            }
-
-
-            if (zAccumulated <target) {
-                TLM.setPower(pwr);
-                BLM.setPower(pwr);
-                TRM.setPower(-pwr);
-                BRM.setPower(-pwr);
-                telemetry.addData("status:","rotating");
-
-                angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-                telemetry.addData("Heading: ", angles.firstAngle);
-                telemetry.addData("Roll: ", angles.secondAngle);
-                telemetry.addData("Pitch", angles.thirdAngle);
-                telemetry.update();
-            }
-
-            telemetry.update();
-
-
-
-        }
-        telemetry.update();
-        TLM.setPower(0);
-        BLM.setPower(0);
-        TRM.setPower(0);
-        BRM.setPower(0);
-        while (opModeIsActive() && !isStopRequested() && TLM.isBusy() && BLM.isBusy() && TRM.isBusy() && BRM.isBusy()) {
-            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-            telemetry.addData("Heading: ", angles.firstAngle);
-            telemetry.addData("Roll: ", angles.secondAngle);
-            telemetry.addData("Pitch", angles.thirdAngle);
-            telemetry.update();
-        }
-
-
-
-
-    }
-    public void Forward(int target,double pwr) {
-
-
-        TLM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        BLM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        TRM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        BRM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-
-
-        TLM.setTargetPosition(-target);
-        BLM.setTargetPosition(-target);
-        TRM.setTargetPosition(-target);
-        BRM.setTargetPosition(-target);
-
-        TLM.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BLM.setTargetPosition(-1000);
+        BRM.setTargetPosition(-1000);
+        TRM.setTargetPosition(-1000);
         BLM.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        TRM.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        BRM.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            TLM.setPower(pwr);
-            BLM.setPower(pwr);
-            TRM.setPower(pwr);
-            BRM.setPower(pwr);
-        while(TLM.isBusy() && BLM.isBusy() && opModeIsActive()&& TRM.isBusy() && opModeIsActive()&& BRM.isBusy() && opModeIsActive())
+        BRM.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        TRM.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BLM.setPower(0.5);
+        TLM.setPower(0.5);
+        BRM.setPower(0.5);
+        TRM.setPower(0.5);
+        int max=0;
+        while(BLM.isBusy() &&BRM.isBusy() &&TRM.isBusy() && opModeIsActive())
         {
-            telemetry.addData("Status:", "Moving to pos");
+
+            telemetry.addData("val. motorului ", BLM.getCurrentPosition());
+            telemetry.addData("in loop", BLM.getPower());
             telemetry.update();
+            TLM.setPower(BLM.getPower());
+
+
         }
-        telemetry.addData("Status:", "At pos");
+        telemetry.addData("inafara loopului", BLM.getCurrentPosition());
         telemetry.update();
-        /* We've reached position once that loop above this ends. Stop motors from moving. */
+        BLM.setPower(0);
         TLM.setPower(0);
         BLM.setPower(0);
         TRM.setPower(0);
         BRM.setPower(0);
 
-
-
-
-
-
-
     }
+
 }

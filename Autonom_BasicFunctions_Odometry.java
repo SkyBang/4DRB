@@ -54,9 +54,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
+@Autonomous(name="Autonom_BasicFunctions_Odometry")
 
-
-public class Autonom_BasicFunctions extends LinearOpMode {
+public class Autonom_BasicFunctions_Odometry extends LinearOpMode {
 
     // Declare OpMode members.
     DcMotor TLM = null;
@@ -66,7 +66,19 @@ public class Autonom_BasicFunctions extends LinearOpMode {
 
     float target=0;
 
+    static final double     TICKS_PER_REV = 8192;
+    static final double     DRIVE_GEAR_REDUCTION    = 1 ;     // This is < 1.0 if geared UP
+    static final double     WHEEL_DIAMETER_CM   = 6 ;     // For figuring circumference
+    static final double     TICKS_PER_CENTIMETER   = (TICKS_PER_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_CM * Math.PI);
+    static final double     TICKS_PER_REV2 =537.6;
+    static final double     DRIVE_GEAR_REDUCTION2    = 0.5 ;     // This is < 1.0 if geared UP
+    static final double     WHEEL_DIAMETER_CM2   = 10.0 ;     // For figuring circumference
+    static final double     TICKS_PER_CENTIMETER2  = (TICKS_PER_REV2 * DRIVE_GEAR_REDUCTION2) / (WHEEL_DIAMETER_CM2 * Math.PI);
 
+    public final double offTLM=5.625;
+    public final double offBLM=3.125;
+    public final double offTRM=2.8125;
+    public final double offBRM=1.5625;
 
 
     BNO055IMU imu;
@@ -89,17 +101,17 @@ public class Autonom_BasicFunctions extends LinearOpMode {
             //am regasit printe elementele robotului conectate le hub cele 4 motoare
 
 
-            BLM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            //BLM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             TLM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            BRM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            //BRM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             TRM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             //servomotorul
             TRM.setDirection(DcMotorSimple.Direction.REVERSE);
             BRM.setDirection(DcMotorSimple.Direction.REVERSE);
 
-            BLM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            //BLM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             TLM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            BRM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            //BRM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             TRM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
@@ -123,9 +135,7 @@ public class Autonom_BasicFunctions extends LinearOpMode {
             TLM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             BRM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             TRM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);*/
-            telemetry.addData("reached turnAbsolute",".");
-            telemetry.update();
-
+          Forward(450,0.3);
             TLM.setPower(0);
             BLM.setPower(0);
             TRM.setPower(0);
@@ -136,7 +146,7 @@ public class Autonom_BasicFunctions extends LinearOpMode {
             BRM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             TRM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             telemetry.addData("reached Forward 1",".");
-            Forward(250,0.3);
+           /*Forward(250,0.3);
             TLM.setPower(0);
             BLM.setPower(0);
             TRM.setPower(0);
@@ -160,7 +170,7 @@ public class Autonom_BasicFunctions extends LinearOpMode {
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
         angles=imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-
+            turnAbsolute(-90,0.15);
             TLM.setPower(0);
             BLM.setPower(0);
             TRM.setPower(0);
@@ -180,7 +190,7 @@ public class Autonom_BasicFunctions extends LinearOpMode {
             TLM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             BRM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             TRM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
+            */
 
             //telemetrie
 
@@ -275,7 +285,8 @@ public class Autonom_BasicFunctions extends LinearOpMode {
 
 
     }
-    public void Forward(int target,double pwr) {
+    public void ForwardAccDecc(int target) {
+        double segment =Math.abs(target / 3);
 
 
         TLM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -284,25 +295,102 @@ public class Autonom_BasicFunctions extends LinearOpMode {
         BRM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
+        TLM.setTargetPosition((int) (-segment-segment-segment));
+        BLM.setTargetPosition((int) (-segment-segment-segment));
+        TRM.setTargetPosition((int) (-segment-segment-segment));
+        BRM.setTargetPosition((int) (-segment-segment-segment));
 
-        TLM.setTargetPosition(-target);
-        BLM.setTargetPosition(-target);
-        TRM.setTargetPosition(-target);
-        BRM.setTargetPosition(-target);
 
         TLM.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         BLM.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         TRM.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         BRM.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            TLM.setPower(pwr);
-            BLM.setPower(pwr);
-            TRM.setPower(pwr);
-            BRM.setPower(pwr);
-        while(TLM.isBusy() && BLM.isBusy() && opModeIsActive()&& TRM.isBusy() && opModeIsActive()&& BRM.isBusy() && opModeIsActive())
+        TLM.setPower(-0.1);
+        BLM.setPower(-0.1);
+        TRM.setPower(-0.1);
+        BRM.setPower(-0.1);
+
+        while(TLM.isBusy() && BLM.isBusy() && opModeIsActive()&& TRM.isBusy() && opModeIsActive()&& BRM.isBusy() && opModeIsActive()&&TLM.getCurrentPosition()>=-segment)
+
+        {
+
+            TLM.setPower(TLM.getCurrentPosition()/segment-0.1);
+            BLM.setPower(TLM.getCurrentPosition()/segment-0.1);
+            TRM.setPower(TLM.getCurrentPosition()/segment-0.1);
+            BRM.setPower(TLM.getCurrentPosition()/segment-0.1);
+            telemetry.addData("Cpos", TLM.getCurrentPosition());
+            telemetry.addData("Speed",TLM.getCurrentPosition() / segment);
+            telemetry.update();
+        }
+        telemetry.addData("Status:", "At pos");
+        telemetry.update();
+        //We've reached position once that loop above this ends. Stop motors from moving.
+
+        TLM.setPower(1);
+        BLM.setPower(1);
+        TRM.setPower(1);
+        BRM.setPower(1);
+        while(TLM.isBusy() && BLM.isBusy() && opModeIsActive()&& TRM.isBusy() && opModeIsActive()&& BRM.isBusy() && opModeIsActive()&&TLM.getCurrentPosition()>=-segment-segment)
         {
             telemetry.addData("Status:", "Moving to pos");
             telemetry.update();
+        }
+        telemetry.addData("Status:", "At pos");
+        telemetry.update();
+
+
+
+        while(TLM.isBusy() && BLM.isBusy() && opModeIsActive()&& TRM.isBusy() && opModeIsActive()&& BRM.isBusy() && opModeIsActive())
+
+        {
+
+            TLM.setPower(segment/(TLM.getCurrentPosition()-segment-segment)-0.1);
+            BLM.setPower(segment/(TLM.getCurrentPosition()-segment-segment)-0.1);
+            TRM.setPower(segment/(TLM.getCurrentPosition()-segment-segment)-0.1);
+            BRM.setPower(segment/(TLM.getCurrentPosition()-segment-segment)-0.1);
+            telemetry.addData("Cpos", TLM.getCurrentPosition()-segment-segment);
+            telemetry.addData("Speed",segment/(TLM.getCurrentPosition()-segment-segment)-0.1);
+            telemetry.update();
+        }
+        telemetry.addData("Status:", "At pos");
+        telemetry.update();
+
+
+
+    }
+    public void Forward(int target,double pwr) {
+
+        TLM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //BLM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        TRM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //BRM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+
+        TLM.setTargetPosition(-target);
+
+        TRM.setTargetPosition(-target);
+
+
+        TLM.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BLM.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        TRM.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BRM.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        TLM.setPower(pwr);
+
+        TRM.setPower(pwr);
+
+        while(TLM.isBusy() && opModeIsActive()&& TRM.isBusy())
+        {
+            telemetry.addData("Status:", "Moving to pos");
+            TLM.setPower(pwr);
+
+            TRM.setPower(pwr);
+            telemetry.update();
+            BLM.setPower(pwr);
+            BRM.setPower(pwr);
         }
         telemetry.addData("Status:", "At pos");
         telemetry.update();
@@ -313,9 +401,43 @@ public class Autonom_BasicFunctions extends LinearOpMode {
         BRM.setPower(0);
 
 
+    }
+    public void DIY_Function (int tTLM,int tTRM,int tBRM,int tBLM,double pTLM,double pTRM,double pBRM,double pBLM)
+    {
+        TLM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        BLM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        TRM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        BRM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        TLM.setTargetPosition((int)Math.round(tTLM*TICKS_PER_CENTIMETER));
+        BLM.setTargetPosition((int)Math.round(tBLM*TICKS_PER_CENTIMETER));
+        TRM.setTargetPosition((int)Math.round(tTRM*TICKS_PER_CENTIMETER));
+        BRM.setTargetPosition((int)Math.round(tBRM*TICKS_PER_CENTIMETER));
 
+        TLM.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BLM.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        TRM.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BRM.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        TLM.setPower(-pTLM + pTLM*-offTLM/100);
+        BLM.setPower(-pBLM + pBLM*-offBLM/100);
+        TRM.setPower(-pTRM + pTRM*-offTRM/100);
+        BRM.setPower(-pBRM + pBRM*-offBRM/100);
+        while (TLM.isBusy() && BLM.isBusy() && opModeIsActive()&& TRM.isBusy() && opModeIsActive()&& BRM.isBusy())
+        {   telemetry.addData("Status:", "Moving to pos");
+            telemetry.addData("TLM",TLM.getCurrentPosition()/TICKS_PER_CENTIMETER);
+            telemetry.addData("BLM",BLM.getCurrentPosition()/TICKS_PER_CENTIMETER);
+            telemetry.addData("TRM",TRM.getCurrentPosition()/TICKS_PER_CENTIMETER);
+            telemetry.addData("BRM",BRM.getCurrentPosition()/TICKS_PER_CENTIMETER);
+            telemetry.update();
+        }
+
+        telemetry.addData("Status:", "At pos");
+        telemetry.update();
+        TLM.setPower(0);
+        BLM.setPower(0);
+        TRM.setPower(0);
+        BRM.setPower(0);
 
 
     }
